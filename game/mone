@@ -1,0 +1,18 @@
+import numpy as np
+ 
+def gradientDescent(start, gradient, learn_rate, max_iteration,tot=0.01): 
+  steps =[start]
+  X = start
+  for i in range (max_iteration): 
+   difference = learn_rate*gradient(X) 
+   if np.abs(difference)<tot: 
+      break
+   X = X - difference
+   steps.append(X)
+  return steps, learn_rate, X, len(steps)
+def gradient_fun(X):
+  return (X+3)**2
+history, learn_rate, result, steps = gradientDescent(10, gradient_fun, 0.01, 100)
+print("Steps in gradient_descent", history) 
+print("Learning rate is",learn_rate)
+print("Number of steps required to reach local minima:", steps)
