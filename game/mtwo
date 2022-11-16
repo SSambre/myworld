@@ -1,0 +1,85 @@
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("E:\BE Notes (Studey Material)\BE Practical\ML\emails.csv")
+'''print(df.shape)
+print(df.head())
+print(df.columns)'''
+
+X = df.drop(['Email No.', 'Prediction'], axis=1)
+Y = df['Prediction']
+
+#selecting model from training and testing 
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state = 44)
+
+#standardizing the dataset using standarscaler
+'''from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)'''
+from sklearn.preprocessing import MinMaxScaler
+sc = MinMaxScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+#selecting neighbors classifier from sklearn
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier(n_neighbors=5)
+classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+
+#selecting metrics for finding mae,mse,rmse,accuracy
+import sklearn.metrics as metrics
+
+mae = (metrics.mean_absolute_error(y_test,y_pred))*100
+mse = (metrics.mean_squared_error(y_test,y_pred))*100
+rmse = (np.sqrt(mse))
+acc = (metrics.accuracy_score(y_test,y_pred))*100
+print("\nPrinting values of KNN classifier")
+print("\nMean Absolute Error{:.2f}".format(mae))
+print("\nMean Squared Error{:.2f}".format(mse))
+print("\nRoot Mean Squared Error{:.2f}".format(rmse))
+print("\nAccuracy {:.2f}".format(acc))
+
+#selecting support vector classifier
+from sklearn.svm import SVC
+classifier1 = SVC(kernel="rbf", random_state=1) 
+classifier1.fit(X_train,y_train)
+
+y_pred1 = classifier1.predict(X_test)
+
+mae = (metrics.mean_absolute_error(y_test,y_pred1))*100
+mse = (metrics.mean_squared_error(y_test,y_pred1))*100
+rmse = (np.sqrt(mse))
+acc = (metrics.accuracy_score(y_test,y_pred1))*100
+print("\nPrint values of mae,mse,rmse,accuracy for Support vector classifier")
+print("\nMean Absolute Error{:.2f}".format(mae))
+print("\nMean Squared Error{:.2f}".format(mse))
+print("\nRoot Mean Squared Error{:.2f}".format(rmse))
+print("\nAccuracy {:.2f}".format(acc))
+
+
+
+Output - 
+Printing values of KNN classifier
+
+Mean Absolute Error13.53
+
+Mean Squared Error13.53
+
+Root Mean Squared Error3.68
+
+Accuracy 86.47
+
+Print values of mae,mse,rmse,accuracy for Support vector classifier
+
+Mean Absolute Error3.67
+
+Mean Squared Error3.67
+
+Root Mean Squared Error1.92
+
+Accuracy 96.33
